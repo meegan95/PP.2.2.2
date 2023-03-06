@@ -10,8 +10,9 @@ import java.util.stream.Collectors;
 @Component
 public class CarDao {
     private static int CAR_COUNT;
-    private List<Car> carList;
-    {
+    private static final List<Car> carList;
+
+    static {
         carList = new ArrayList<>();
         carList.add(new Car(++CAR_COUNT, "BMW", "3"));
         carList.add(new Car(++CAR_COUNT, "MERCEDES", "C"));
@@ -19,14 +20,8 @@ public class CarDao {
         carList.add(new Car(++CAR_COUNT, "AUDI", "A4"));
         carList.add(new Car(++CAR_COUNT, "LEXUS", "IS"));
     }
-    public List<Car> index(){
-        return carList;
-    }
-    public List<Car> index(Integer count){
-        return carList.stream().filter(car -> car.getId() <= count).collect(Collectors.toList());
-    }
 
-    public Car show(int id){
-        return carList.stream().filter(car -> car.getId() == id).findAny().orElse(null);
+    public List<Car> index(Integer count) {
+        return carList.stream().limit(count).collect(Collectors.toList());
     }
 }

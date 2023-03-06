@@ -4,38 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import web.dao.CarDao;
+import web.service.CarService;
 
 @Controller
 @RequestMapping("/cars")
 public class CarsController {
 
-    private CarDao carDao;
+    private CarService carService;
+
     @Autowired
-    public CarsController(CarDao carDao) {
-        this.carDao = carDao;
+    public CarsController(CarService carService) {
+        this.carService = carService;
     }
 
     @GetMapping()
-    public String index(@RequestParam (value = "count", required = false) Integer count, Model model){
-        //все машины
-        if (count != null) {
-            model.addAttribute("cars", carDao.index(count));
-        } else {
-        model.addAttribute("cars", carDao.index());
-        }
-        return "cars/index";
-
+    public String index(@RequestParam(value = "count", defaultValue = "5") Integer count, Model model) {
+        model.addAttribute("cars", carService.index(count));
+        return "cars";
     }
-
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id,Model model){
-        //машина по id
-        model.addAttribute("car", carDao.show(id));
-        return "cars/show";
-    }
-
 }
